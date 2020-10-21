@@ -17,9 +17,10 @@ function table_process() {
     var table = document.getElementById('RN_TABLE');
     var table_d = table.getElementsByTagName('td')
 
-    var raw_ar = []
+    var raw_ar = [] // declare array
     for (let i = 0; i < table_d.length; i++) {
-        raw_ar.push(table_d[i].textContent)
+        raw_ar.push(table_d[i].textContent) // append the textcontents 
     }
+    
     return raw_ar
 }
