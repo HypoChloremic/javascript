@@ -237,10 +237,15 @@ will add a paragraph element in the HTML code of the page.
 ##### Plotting dots
 The following code needs to be preceded by a bunch of other code as well. However, we will only discuss this (refer to the `scatter.js` somewhere in the learning folders )
 ```javascript
-  function rn(data){
+var d_ = {
+    'x': ["0","1","2","3","4","5"],
+    'y': ["0","1","2","3","4","5"]
+};
+
+function rn(data){
   svg.append('g')
     .selectAll("dot")
-    .data(d3.zip(data.x, data.y))
+    .data(d3.zip(data.x, data.y)) // the more important line of the code
     .enter()
     .append("circle")
       .attr("cx", function (d) { return x(d[0]); } )
@@ -250,10 +255,9 @@ The following code needs to be preceded by a bunch of other code as well. Howeve
 
 }
 
-var d_ = {
-    'x': ["0","1","2","3","4","5"],
-    'y': ["0","1","2","3","4","5"]
-};
+// Run the code
+rn(d_);
+
 ```
 
 Alright, several important stuff is happening above. One very important thing is the way the data is being parsed. `d_` is technically a two dimensional matrix. However, `d3` cant handle it in the way it looks:
