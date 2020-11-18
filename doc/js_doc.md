@@ -61,7 +61,33 @@ for (let index = 0; index < array.length; index++) {
 }
 ```
 
+### Call-by-reference and call-by-value
 
+```javascript
+function changeStuff(a, b, c)
+{
+  a = a * 10;
+  b.item = "changed";
+  c = {item: "changed"};
+}
+
+var num = 10;
+var obj1 = {item: "unchanged"};
+var obj2 = {item: "unchanged"};
+
+changeStuff(num, obj1, obj2);
+
+console.log(num);
+console.log(obj1.item);
+console.log(obj2.item);
+
+>>> 
+.. 10
+.. changed
+.. unchanged
+```
+
+'If you change the **INTERNALS** of the parameter, ***that*** will ***propagate back up*** (as with `obj1`)', however changing the parameters themselves (as with num and obj2), there will be no propagation. 
 
 ## Extracting data from tables
 
