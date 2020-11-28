@@ -200,7 +200,15 @@ let text = ' asd1231 sdsd kr '
 text =  text.replace(/\s/g, '').replace('kr', '')
 ```
 
+### Cache update
 
+To update the cache:
+
+```html
+<link rel="stylesheet" href="/static/assets/css/jexcel_v4.css?version=1">
+```
+
+add a version number as a url parameter in the end of the href. 
 
 # jQuery
 
