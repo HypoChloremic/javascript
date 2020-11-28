@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- It is required to include a style sheet -->
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- It is the outside div class in the style.css that is used -->
+    <div class="chart-area">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    
+    <input type="number" name="xValue" placeholder="X Value" id="xValue" />
+    <input type="number" name="yValue" placeholder="Y Value" id="yValue" />
+    <input type="submit" id="update" value="Update", onclick="get_data('xValue', 'yValue')"/>
+    <label id='labelValue'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        data = {
+            xValue: 0,
+            yValue: 0
+        };
+
+        let get_data = function(xT, yT){
+            var xValue = parseInt(document.getElementById(xT).value);
+            var yValue = parseInt(document.getElementById(yT).value);
+            document.getElementById('labelValue').innerHTML = String(xValue + yValue);
+            data.xValue = xValue
+            data.yValue = yValue
+        };
+
+        gradientChartOptionsConfigurationWithTooltipPurple = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+
+            tooltips: {
+                backgroundColor: '#f5f5f5',
+                titleFontColor: '#333',
+                bodyFontColor: '#666',
+                bodySpacing: 4,
+                xPadding: 12,
+                mode: "nearest",
+                intersect: 0,
+                position: "nearest"
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                barPercentage: 1, // the scale of the bar size, 
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 125,
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+                }],
+
+                xAxes: [{
+                barPercentage: 0.5, // scale for the bar, changing bar width
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(225,78,202,0.1)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    padding: 20,
+                    fontColor: "#9a9a9a"
+                }
+                }]
+            }
+        };
+        var ctx = document.getElementById('myChart').getContext('2d')
+        
+        var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+        gradientStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
+        gradientStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
+        gradientStroke.addColorStop(0, 'rgba(29,140,248,0)');
+
+        var data = {
+        labels: ['1', '2', '3'],
+        datasets: [{
+            data: [100], // Most important part
+            label: "Data",
+            fill: true,
+            backgroundColor: gradientStroke,
+            borderColor: '#d048b6',
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBackgroundColor: '#d048b6',
+            pointBorderColor: 'rgba(255,255,255,0)',
+            pointHoverBackgroundColor: '#d048b6',
+            pointBorderWidth: 20,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 15,
+            pointRadius: 4,
+        }]
+        };
+        var params = {
+            type: 'bar',
+            backgroundcolor: gradientStroke,
+            labels: ["1", "2", "3"],
+            data: data,
+            options: gradientChartOptionsConfigurationWithTooltipPurple
+        };
+        var myChart = new Chart(ctx, params);
+
+    </script>
+</body>
+</html>
