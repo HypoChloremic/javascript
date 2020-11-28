@@ -163,6 +163,43 @@ function table_process() {
 }		
 ```
 
+### Operators
+
+#### Question mark
+
+`?` is the ternary operator. It takes three operands:
+
+1. condition followed by
+2. `?`
+3. then expresstion to execute if the *condition* is truthy 
+4. followed by a `:`
+5. and finally the expression to execute if the condition is falsy
+
+Example:
+
+```javascript
+function getFee(isMember){
+    return (isMember ? "2" : "10");
+}
+
+console.log(getFee(true));
+// outputs: 2
+
+console.log(getFee(false));
+// outputs: 10
+```
+
+### String manipulation
+
+#### Replacing whitespace
+
+Assume we have the following text
+
+```javascript
+let text = ' asd1231 sdsd kr '
+text =  text.replace(/\s/g, '').replace('kr', '')
+```
+
 
 
 # jQuery
