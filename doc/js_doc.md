@@ -523,6 +523,53 @@ class Square extends React.component {
 * !! NOTE: `this.state` is used just like `self` in python, where it is accessible privately across the entire class!
   * means that we can call this
 
+
+
+#### Immutability
+
+```javascript
+/* ... */   
+handleClick(i){
+    // Note how in handleClick, we call .slice() 
+    // to create a copy of the squares array to 
+    // modify instead of modifying the existing 
+    // array. We will explain why we create a 
+    // copy of the squares array in the next section.
+
+    const squares = this.state.squares.slice();
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+```
+
+
+
+in the previous code example, we suggested that you use the `.slice()` method to create a copy of the `squares` array to copy instead of modifying the existing array. We’ll now discuss immutability and why immutability is important to learn.
+
+There are generally two approaches to changing data. The first approach is to *mutate* the data by directly changing the data’s values. The second approach is to replace the data with a new copy which has the desired changes.
+
+
+
+
+
+### Function components
+
+In React, **function components** are a simpler way to write components that only contain a `render` method and don’t have their own state. Instead of defining a class which extends `React.Component`, we can write a function that takes `props` as input and returns what should be rendered. Function components are less tedious to write than classes, and many components can be expressed this way.
+
+
+
+```javascript
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
+}
+```
+
+
+
 ### props
 
 This is how we pass values to components, from inside javascript methods.
@@ -602,7 +649,16 @@ The `ShoppingList` component above only renders built-in DOM components like `<d
 
 
 
+### Determining when to re-render
+
+The main benefit of immutability is that it helps you build *pure components* in React. Immutable data can easily determine if changes have been made, which helps to determine when a component requires re-rendering.
+
+You can learn more about `shouldComponentUpdate()` and how you can build *pure components* by reading [Optimizing Performance](https://reactjs.org/docs/optimizing-performance.html#examples).
+
+
+
 ## Tutorial
 
 ### Tic-tac-toe
 
+https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
