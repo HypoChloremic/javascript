@@ -89,6 +89,39 @@ console.log(obj2.item);
 
 'If you change the **INTERNALS** of the parameter, ***that*** will ***propagate back up*** (as with `obj1`)', however changing the parameters themselves (as with num and obj2), there will be no propagation. 
 
+
+
+### Classes
+
+#### Extend
+
+The extend keyword in class definitions are used for ***inheritance***. 
+
+```javascript
+class Car {
+  constructor(brand) {
+    this.carname = brand;
+  }
+    
+  present() {
+    return 'I have a ' + this.carname;
+  }
+    
+}
+
+class Model extends Car {
+  constructor(brand, mod) {
+    super(brand); // ? adds the constructor of the parent class
+    this.model = mod;
+  }
+  show() {
+    return this.present() + ', it is a ' + this.model;
+  }
+}
+```
+
+
+
 ## Extracting data from tables
 
 To extract table data and interact with it seems to be a very pertinent problem for javascript. Imagine a website with an interesting table. Would it not be nice to perform some basic calculations pertaining to this table, interactively in the console?
@@ -363,4 +396,213 @@ we achieve that by `d3.zip` the two vectors in the `d_` object
 
 
 # React
+
+## Installation
+
+### Starting project
+
+```shell
+npx create-react-app my-app
+```
+
+#### Empty src
+
+Empty the `src` folder. Here we can add `index.css` and `index.js`, which is in the main project folder. 
+
+#### imports
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+```
+
+
+
+### Errors
+
+#### Creating in windows running in linux
+
+We had an issue starting a project that was had been npx-started in windows and then cloned to a linux system. The problem associated with the `modules` not being installed on the linux system. This is solved by npm install inside the project folder. 
+
+## Components
+
+React is nice for building user-interfaces. Implements **components**. 
+
+* With components, **we tell react what we want to see on the screen**:
+* When our data changes, react will update and re-rennder our components
+
+
+
+### React.Component
+
+```javascript
+class ShoppingList extends React.Component {
+  render() {
+    return (
+      <div className="shopping-list">
+        <h1>Shopping List for {this.props.name}</h1>
+        <ul>
+          <li>Instagram</li>
+          <li>WhatsApp</li>
+          <li>Oculus</li>
+        </ul>
+      </div>
+    );
+  }
+}
+
+// Example usage: <ShoppingList name="Mark" />
+```
+
+Here ShoppingList is:
+
+* React component class, 
+* or React component type
+* !! A component takes in parameters, called **props** (short for properties)
+* returns a hierarchy of views to display via the **render method**
+
+
+
+#### render method
+
+Very important part of the `React.component`
+
+* returns a *description* of what we wabt to see on teh screen
+* react takes teh description, displays the result
+* in particular, `render` returnsa **React element** which is a lightweight description of what to render.
+
+
+
+#### Constructor
+
+***Must contain***
+
+* `super(props);`: This is required when doing constructors in react components.
+
+
+
+#### state
+
+Situation where we want the component to store a value, as in **remembering a state change**, for instance after a click. 
+
+
+
+***To use the state***
+
+* define a `constructor(props)` (corresponds to `__init__` in python)
+* make sure to `super(props)`
+
+
+
+```javascript
+class Square extends React.component {
+	constructor(props){
+		super(props);
+		this.state = {
+			value: null,
+		};
+	}
+    
+    render (
+    
+        <button 
+          className="square" 
+          onClick={() => this.setState({value:'X'})}
+        >
+          {this.state.value}
+        </button>
+      );
+    )
+}
+```
+
+***setState method***
+
+* This is an inherited method where we can change the `this.state` variable
+* !! NOTE: `this.state` is used just like `self` in python, where it is accessible privately across the entire class!
+  * means that we can call this
+
+### props
+
+This is how we pass values to components, from inside javascript methods.
+
+```javascript
+class Square extends React.Component {
+    render() {
+      return (
+        <button className="square">
+        </button>
+      );
+    }
+  }
+
+class Board extends React.Component {
+  renderSquare(i) {
+    return <Square />;
+  }
+```
+
+Note here that `js classes` that `extend` `React.component` can be called by simply providing the classname inside a component tags: <>, i.e. `<Square />. 
+
+```javascript
+class Square extends React.Component {
+    render() {
+      return (
+        <button className="square">
+          {this.props.value} // how we access the passed parameter
+        </button>
+      );
+    }
+  }
+
+class Board extends React.Component {
+  renderSquare(i) {
+    return <Square value={i} />;
+  }
+```
+
+
+
+To pass a parameter to a `React.component` when using the `<"classname">` we need to implement the following syntax: 
+
+```javascript
+// To pass parameter 'value'
+<Square value = {i} />
+
+// Inside the class
+this.props.value
+```
+
+| <img src="./figs/react_VuOsYdGrx4.png" alt="VuOsYdGrx4" style="zoom:50%;" /> |      |      |
+| ------------------------------------------------------------ | ---- | ---- |
+| After passing `this.props.value`                             |      |      |
+
+
+
+### JSX syntax
+
+* these structures easier to write
+* the `<div />` syntax is TRANSFORMED at build time to `React.createElement('div')`
+
+The above example is therefore equivalent to:
+
+```javascript
+return React.createElement('div', {className: 'shopping-list'},
+	React.createElement('h1', /*... h1 children ...*/),
+	React.createElement('ul', /*... ul children ...*/)
+);
+```
+
+
+
+JSX comes with the full power of JavaScript. You can put *any* JavaScript expressions within braces inside JSX
+
+The `ShoppingList` component above only renders built-in DOM components like `<div />` and `<li />`. But you can compose and render custom React components too. For example, we can now refer to the whole shopping list by writing `<ShoppingList />`
+
+
+
+## Tutorial
+
+### Tic-tac-toe
 
