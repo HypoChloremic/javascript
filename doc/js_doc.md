@@ -243,6 +243,19 @@ To update the cache:
 
 add a version number as a url parameter in the end of the href. 
 
+
+
+## Boolean
+
+### question mark ?
+
+```js
+true ? "X" : "O";
+> "X"
+```
+
+
+
 # jQuery
 
 ## Basics
@@ -549,6 +562,24 @@ in the previous code example, we suggested that you use the `.slice()` method to
 There are generally two approaches to changing data. The first approach is to *mutate* the data by directly changing the data’s values. The second approach is to replace the data with a new copy which has the desired changes.
 
 
+
+#### onClick with the same class
+
+Say we want onClick to call a method at the same class level:
+
+```
+class random extends React.component{
+	back(){
+		return "hello";
+	}
+
+	render(){
+		return(
+			<div onClick={()=>back()}></div>
+		)
+	}
+}
+```
 
 
 

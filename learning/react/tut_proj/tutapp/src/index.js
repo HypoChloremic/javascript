@@ -50,18 +50,38 @@ class Board extends React.Component {
   constructor(props){
     super(props);
     this.clickState = 0;
+    this.victor = null;
+    this.curr_i = 0;
     this.state = {
       squares: Array(9).fill(null),
       xIsNext: true,
+      history: [Array(9).fill(null)],
     };
   }
 
+  checkVictory(){
+    let count = 0;
+    for (let i of this.state.squares){
+      if(i != null){
+        count++;
+      };
+    };
+
+    if(count === this.state.squares.length){
+      this.victor = victory(this.state.squares);
+    }else{
+      console.log("Not finished")
+    }
+
+  }
+
   handleClick(i){
-    // Note how in handleClick, we call .slice() 
-    // to create a copy of the squares array to 
-    // modify instead of modifying the existing 
-    // array. We will explain why we create a 
-    // copy of the squares array in the next section.
+    /* Note how in handleClick, we call .slice() 
+     to create a copy of the squares array to 
+     modify instead of modifying the existing 
+     array. We will explain why we create a 
+     copy of the squares array in the next section.
+    */
 
     const squares = this.state.squares.slice();
     squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -69,8 +89,19 @@ class Board extends React.Component {
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
-
     });
+    this.state.history.push(squares);
+    this.curr_i++; 
+
+  }
+
+  back(){
+    this.setState({
+      squares: this.state.history[this.curr_i - 1],
+    });
+    if(this.curr != 0){
+      this.curr_i--;
+    };
   }
 
   renderSquare(i) {
@@ -84,7 +115,14 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    // Check if board filled
+    this.victor = victory(this.state.squares);
+    let status = "";
+    if (this.victor != null) {
+      status = "The victor is " + this.victor;
+    }else{
+      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
 
     return (
       <div 
@@ -111,6 +149,9 @@ class Board extends React.Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
+        <div className="history" id="Back" onClick={() => this.back()}>{"Back"}</div>
+        <div className="history" id="Forward">{"Forward"}</div>
+        
 
       </div>
     );
@@ -146,6 +187,29 @@ class Text extends React.Component {
       <h3> "Hello world" </h3>
     );
   }
+}
+
+function victory(squares){
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (let i = 0; i < lines.length; i++){
+    const [a,b,c] = lines[i];
+    if(squares[a] && squares[a] === squares[b] && squares [a] 
+      === squares[c]
+      ){
+        return squares[a];
+      };
+  }
+  return null;
 }
 
 // ======================================== //
