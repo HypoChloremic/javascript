@@ -833,13 +833,13 @@ And more. Instead, Next.js provides an `Image` component out of the box to handl
 
 - Save the picture as `profile.jpg` in the `public/images` directory.
 
-#### Image Component and Image Optimization
+##### Image Component and Image Optimization
 
 [`next/image`](https://nextjs.org/docs/api-reference/next/image) is an extension of the HTML `<img>` element, evolved for the modern web.
 
 Next.js also has support for Image Optimization by default. This allows for resizing, optimizing, and serving images in modern formats like [WebP](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#webp) when the browser supports it. This avoids shipping large images to devices with a smaller viewport. It also allows Next.js to automatically adopt future image formats and serve them to browsers that support those formats.Automatic Image Optimization works with any image source. Even if the image is hosted by an external data source, like a CMS, it can still be optimized.
 
-#### Using the Image Component
+##### Using the Image Component
 
 Instead of optimizing images at build time, Next.js optimizes images on-demand, as users request them. Unlike static site generators and static-only solutions, your build times aren't increased, whether shipping 10 images or 10 million images.
 
@@ -879,7 +879,7 @@ Notice that `<Head>` is used instead of the lowercase `<head>`. `<Head>` is a Re
 
 You can import the `Head` component from the [`next/head`](https://nextjs.org/docs/api-reference/next/head) module.
 
-#### Adding `Head` to `first-post.js`
+##### Adding `Head` to `first-post.js`
 
 We haven't added a `<title>` to our `/posts/first-post` route. Let's add one.
 
@@ -993,10 +993,249 @@ Furthermore, Next.js’s code splitting feature works on [CSS Modules](https://n
 
 [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) are extracted from the JavaScript bundles at build time and generate `.css` files that are loaded automatically by Next.js.
 
+#### Global Styles
+
+[CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) are useful for component-level styles. But if you want some CSS to be loaded by **every page**, Next.js has support for that as well.
+
+To load [global CSS](https://nextjs.org/docs/basic-features/built-in-css-support#adding-a-global-stylesheet) files, **create a file called [`pages/_app.js`](https://nextjs.org/docs/advanced-features/custom-app)** with the following content:
+
+```react
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+```
+
+This `App` component is the top-level component which will be common across all the different pages. You can use this `App` component to keep state when navigating between pages, for example.
+
+**Important:** You need to restart the development server when you add [`pages/_app.js`](https://nextjs.org/docs/advanced-features/custom-app). Press Ctrl + c to stop the server and run:
+
+```bash
+> npm run dev
+```
+
+#### Adding Global CSS
+
+In Next.js, you can add [global CSS](https://nextjs.org/docs/basic-features/built-in-css-support#adding-a-global-stylesheet) files by importing them from [`pages/_app.js`](https://nextjs.org/docs/advanced-features/custom-app). You **cannot** import global CSS anywhere else.
+
+The reason that [global CSS](https://nextjs.org/docs/basic-features/built-in-css-support#adding-a-global-stylesheet) can't be imported outside of `pages/_app.js` is that global CSS affects all elements on the page.
+
+If you were to navigate from the homepage to the `/posts/first-post` page, global styles from the homepage would affect `/posts/first-post` unintentionally.
+
+You can place the global CSS file anywhere and use any name. So let’s do the following:
+
+- Create a top-level `styles` directory and create `global.css` inside.
+- Add the following content to `styles/global.css`. It resets some styles and changes the color of the `a` tag:
+
+```css
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  line-height: 1.6;
+  font-size: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+```
+
+
+
+Finally, open `pages/_app.js` add import the CSS file like so:
+
+```react
+import '../styles/global.css'
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+```
+
+**If it didn’t work**: Make sure you restart the development server when you add `pages/_app.js`.
+
 ##### Newline
 
 ```react
 {' '} adds an empty space, which is used to divide text over multiple lines.
+```
+
+#### Update components/layout.module.css
+
+First, open `components/layout.module.css` and replace its content with the following more polished styles for the layout and profile picture:
+
+```css
+.container {
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.backToHome {
+  margin: 3rem 0 0;
+}
+```
+
+#### Create styles/utils.module.css
+
+Second, let’s create a set of utility CSS classes for typography and others that will be useful across multiple components.
+
+Let’s add a new CSS file called `styles/utils.module.css` with the following content:
+
+```css
+.heading2Xl {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.05rem;
+  margin: 1rem 0;
+}
+
+.headingXl {
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: -0.05rem;
+  margin: 1rem 0;
+}
+
+.headingLg {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin: 1rem 0;
+}
+
+.headingMd {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.borderCircle {
+  border-radius: 9999px;
+}
+
+.colorInherit {
+  color: inherit;
+}
+
+.padding1px {
+  padding-top: 1px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  margin: 0 0 1.25rem;
+}
+
+.lightText {
+  color: #666;
+}
+```
+
+#### Update components/layout.js
+
+Third, open `components/layout.js` and replace its content with the following code, **changing** `Your Name` to an actual name:
+
+```react
+import Head from 'next/head'
+import Image from 'next/image'
+import styles from './layout.module.css'
+import utilStyles from '../styles/utils.module.css'
+import Link from 'next/link'
+
+const name = 'Your Name'
+export const siteTitle = 'Next.js Sample Website'
+
+export default function Layout({ children, home }) {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="Learn how to build a personal website using Next.js"
+        />
+        <meta
+          property="og:image"
+          content={`https://og-image.vercel.app/${encodeURI(
+            siteTitle
+          )}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
+        />
+        <meta name="og:title" content={siteTitle} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+      <header className={styles.header}>
+        {home ? (
+          <>
+            <Image
+              priority
+              src="/images/profile.jpg"
+              className={utilStyles.borderCircle}
+              height={144}
+              width={144}
+              alt={name}
+            />
+            <h1 className={utilStyles.heading2Xl}>{name}</h1>
+          </>
+        ) : (
+          <>
+            <Link href="/">
+              <a>
+                <Image
+                  priority
+                  src="/images/profile.jpg"
+                  className={utilStyles.borderCircle}
+                  height={108}
+                  width={108}
+                  alt={name}
+                />
+              </a>
+            </Link>
+            <h2 className={utilStyles.headingLg}>
+              <Link href="/">
+                <a className={utilStyles.colorInherit}>{name}</a>
+              </Link>
+            </h2>
+          </>
+        )}
+      </header>
+      <main>{children}</main>
+      {!home && (
+        <div className={styles.backToHome}>
+          <Link href="/">
+            <a>← Back to home</a>
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
 ```
 
 
