@@ -414,7 +414,7 @@ we achieve that by `d3.zip` the two vectors in the `d_` object
 
 ### Starting project
 
-```shell
+```bash
 npx create-react-app my-app
 ```
 
@@ -672,13 +672,9 @@ return React.createElement('div', {className: 'shopping-list'},
 );
 ```
 
-
-
 JSX comes with the full power of JavaScript. You can put *any* JavaScript expressions within braces inside JSX
 
 The `ShoppingList` component above only renders built-in DOM components like `<div />` and `<li />`. But you can compose and render custom React components too. For example, we can now refer to the whole shopping list by writing `<ShoppingList />`
-
-
 
 ### Determining when to re-render
 
@@ -686,10 +682,355 @@ The main benefit of immutability is that it helps you build *pure components* in
 
 You can learn more about `shouldComponentUpdate()` and how you can build *pure components* by reading [Optimizing Performance](https://reactjs.org/docs/optimizing-performance.html#examples).
 
-
-
 ## Tutorial
 
 ### Tic-tac-toe
 
 https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
+
+
+
+## Frameworks
+
+### Next.js
+
+#### Installation
+
+```bash
+> npx create-next-app kastadevaccin --use-npm --example "https://github.com/vercel/next-learn-starter/tree/master/learn-starter"
+```
+
+#### Example
+
+Install as above
+
+##### start the dev server
+
+```
+> cd path/to/folder
+> npm run dev
+```
+
+##### edit index.js
+
+```react
+      <main>
+        <h1 className="title">
+          Learning <a href="https://nextjs.org">Next.js!</a>
+        </h1>
+```
+
+##### adding pages
+
+In Next.js, a page is a React Component exported from a file in the [`pages` directory](https://nextjs.org/docs/basic-features/pages).
+
+Pages are associated with a route based on their **file name**. For example, in development:
+
+- `pages/index.js` is associated with the `/` route.
+- `pages/posts/first-post.js` is associated with the `/posts/first-post` route.
+
+***Creating page***
+
+```bash
+> touch ./pages/first-post.js
+```
+
+`first-post.js`
+
+```javascript
+export default function FirstPost(){
+	return <h1>First post</h1>
+}
+```
+
+* The component can have any name, 
+* but you must export it as a `default` export.
+
+##### instead of HTMl,we use JSC
+
+Simply create a JS file under the [`pages` directory](https://nextjs.org/docs/basic-features/pages), and the path to the file becomes the URL path.
+
+In a way, this is similar to building websites using HTML or PHP files. Instead of writing HTML you write JSX and use React Components.
+
+##### Link component
+
+When linking between pages on websites, we can use `<a>` HTML tags. 
+
+In `Next.js`, you use the `Link` Component from `next/link` to wrap the `<a>`. 
+
+`<Link>` allows us to do client-side navigation to different page in the application. 
+
+##### Using <Link>
+
+first, `import Link from 'next/Link'` in `pages/index.js`. 
+
+```js
+import Link from 'next/Link'
+```
+
+Change `<a>` to `<Link>`
+
+```react
+<h1 className="title">
+  Learn <a href="https://nextjs.org">Next.js!</a>
+</h1>
+```
+
+into 
+
+```react
+<h1 className="title">
+  Read{' '}
+  <Link href="/posts/first-post">
+    <a>this page!</a>
+  </Link>
+</h1>
+```
+
+***Changing first-post***
+
+```react
+import Link from 'next/link'
+export default function FirstPost(){
+    return (
+        <> // jsx requires parent element
+            <h1>
+                First post
+            </h1>
+            <h2>
+                <Link href="../"><a>Back to home</a></Link>
+            </h2>
+        </> // jsx parent element needs to be closed
+    )
+}
+```
+
+Here’s a simple way you can verify it:
+
+- Use the browser’s developer tools to change the `background` CSS property of `<html>` to `yellow`.
+- Click on the links to go back and forth between the two pages.
+- You’ll see that the yellow background persists between page transitions.
+
+This shows that the browser does *not* load the full page and client-side navigation is working.
+
+If you’ve used `<a href="…">` instead of `<Link href="…">` and did this, the background color will be cleared on link clicks because the browser does a full refresh.
+
+
+
+#### Assets
+
+Next.js can serve **static assets**, like images, under **the top-level [`public` directory](https://nextjs.org/docs/basic-features/static-file-serving)**. Files inside `public` can be referenced from the root of the application similar to [`pages`](https://nextjs.org/docs/basic-features/pages).
+
+The `public` directory is also useful for `robots.txt`, Google Site Verification, and any other static assets. Check out the documentation for [Static File Serving](https://nextjs.org/docs/basic-features/static-file-serving) to learn more.
+
+However, this means you have to manually handle:
+
+- Ensuring your image is responsive on different screen sizes
+- Optimizing your images with a third-party tool or library
+- Only loading images when they enter the viewport
+
+And more. Instead, Next.js provides an `Image` component out of the box to handle this for you.
+
+- Save the picture as `profile.jpg` in the `public/images` directory.
+
+#### Image Component and Image Optimization
+
+[`next/image`](https://nextjs.org/docs/api-reference/next/image) is an extension of the HTML `<img>` element, evolved for the modern web.
+
+Next.js also has support for Image Optimization by default. This allows for resizing, optimizing, and serving images in modern formats like [WebP](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#webp) when the browser supports it. This avoids shipping large images to devices with a smaller viewport. It also allows Next.js to automatically adopt future image formats and serve them to browsers that support those formats.Automatic Image Optimization works with any image source. Even if the image is hosted by an external data source, like a CMS, it can still be optimized.
+
+#### Using the Image Component
+
+Instead of optimizing images at build time, Next.js optimizes images on-demand, as users request them. Unlike static site generators and static-only solutions, your build times aren't increased, whether shipping 10 images or 10 million images.
+
+Images are lazy loaded by default. That means your page speed isn't penalized for images outside the viewport. Images load as they are scrolled into viewport.
+
+Images are always rendered in such a way as to avoid [Cumulative Layout Shift](https://web.dev/cls/), a [Core Web Vital](https://web.dev/vitals/#core-web-vitals) that Google is going to [use in search ranking](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html).
+
+Here's an example using [`next/image`](https://nextjs.org/docs/api-reference/next/image.md) to display our profile picture. The `height` and `width` props should be the desired rendering size, with an aspect ratio identical to the source image.
+
+**Note:** We'll use this component later in "Polishing Layout".
+
+```jsx
+import Image from 'next/image'
+
+const YourComponent = () => (
+  <Image
+    src="/images/profile.jpg" // Route of the image file
+    height={144} // Desired size with correct aspect ratio
+    width={144} // Desired size with correct aspect ratio
+    alt="Your Name"
+  />
+)
+
+// We can then call <YourComponent>
+```
+
+#### Metadata
+
+```react
+<Head>
+  <title>Create Next App</title>
+  <link rel="icon" href="/favicon.ico" />
+</Head>
+```
+
+Notice that `<Head>` is used instead of the lowercase `<head>`. `<Head>` is a React Component that is built into Next.js. It allows you to modify the `<head>` of a page.
+
+You can import the `Head` component from the [`next/head`](https://nextjs.org/docs/api-reference/next/head) module.
+
+#### Adding `Head` to `first-post.js`
+
+We haven't added a `<title>` to our `/posts/first-post` route. Let's add one.
+
+Open the `pages/posts/first-post.js` file and add an import for `Head` from [`next/head`](https://nextjs.org/docs/api-reference/next/head) at the beginning of the file:
+
+```react
+import Head from 'next/head'
+```
+
+To learn more about the `Head` component, check out the [API reference for `next/head`](https://nextjs.org/docs/api-reference/next/head).
+
+#### Styling
+
+Let’s now talk about **CSS styling**.
+
+As you can see, our index page ([http://localhost:3000](http://localhost:3000/)) already has some styles. If you take a look at `pages/index.js`, you should see code like this:
+
+```react
+<style jsx>{`
+  …
+`}</style>
+```
+
+This page is using a library called [styled-jsx](https://github.com/vercel/styled-jsx). It’s a “CSS-in-JS” library — it lets you write CSS within a React component, and the CSS styles will be *scoped* (other components won’t be affected).
+
+Next.js has built-in support for [styled-jsx](https://github.com/vercel/styled-jsx), but you can also use other popular CSS-in-JS libraries such as [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components) or [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
+
+#### Writing and Importing CSS
+
+Next.js has [built-in support for CSS](https://nextjs.org/docs/basic-features/built-in-css-support) and Sass which allows you to import `.css` and `.scss` files.
+
+Using popular CSS libraries like [Tailwind CSS](https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss) is also supported.
+
+In this lesson, we’ll talk about how to write and import CSS files in Next.js. We’ll also talk about Next.js’s built-in support for [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) and [Sass](https://nextjs.org/docs/basic-features/built-in-css-support#sass-support). Let’s dive in!
+
+##### Layout component
+
+First, Let’s create a **Layout** component which will be shared across all pages.
+
+- Create a top-level directory called `components`.
+- Inside `components`, create a file called `layout.js` with the following content:
+
+```react
+export default function Layout({ children }) {
+  return <div>{children}</div>
+}
+```
+
+Then, open `pages/posts/first-post.js`, add an import for the `Layout` component, and make it the outermost component:
+
+```react
+import Head from 'next/head'
+import Link from 'next/link'
+import Layout from '../../components/layout'
+
+export default function FirstPost() {
+  return (
+    <Layout>
+      <Head>
+        <title>First Post</title>
+      </Head>
+      <h1>First Post</h1>
+      <h2>
+        <Link href="/">
+          <a>Back to home</a>
+        </Link>
+      </h2>
+    </Layout>
+  )
+}
+```
+
+##### Adding css
+
+Now, let’s add some styles to the `Layout` component. To do so, we’ll use [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css), which lets you import CSS files in a React component.
+
+Create a file called `components/layout.module.css` with the following content:
+
+```css
+.container {
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
+}
+```
+
+To use this `container` class inside `components/layout.js`, you need to:
+
+- Import the CSS file and assign a name to it, like `styles`
+- Use `styles.container` as the `className`
+
+Open `components/layout.js` and replace its content with the following:
+
+```react
+import styles from './layout.module.css'
+
+export default function Layout({ children }) {
+  return <div className={styles.container}>{children}</div>
+}
+```
+
+### Automatically Generates Unique Class Names
+
+Now, if you take a look at the HTML in your browser’s devtools, you’ll notice that the `div` rendered by the `Layout` component has a class name that looks like `layout_container__...`:
+
+![Devtools](https://nextjs.org/static/images/learn/assets-metadata-css/devtools.png)
+
+This is what [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) does: *It automatically generates unique class names*. As long as you use CSS Modules, you don’t have to worry about class name collisions.
+
+Furthermore, Next.js’s code splitting feature works on [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) as well. It ensures the minimal amount of CSS is loaded for each page. This results in smaller bundle sizes.
+
+[CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) are extracted from the JavaScript bundles at build time and generate `.css` files that are loaded automatically by Next.js.
+
+##### Newline
+
+```react
+{' '} adds an empty space, which is used to divide text over multiple lines.
+```
+
+
+
+# Yarn
+
+## Installation
+
+```bash
+> npm install -g yarn
+// move into project folder
+> cd ~/path/to/folder
+// run the following
+> yarn set version berry
+```
+
+## Updating to the latest versions
+
+Should you later want to update Yarn to the latest version, just run:
+
+```bash
+yarn set version latest
+```
+
+## Installing the latest build fresh from master
+
+From time to time even the most recent releases aren't enough, and you then will want to try out the very latest master to check if a bug has been fixed. This has become very simple with Yarn 2! Just run the following command:
+
+```bash
+yarn set version from sources
+```
+
+Similarly, specific PRs can be installed using the `--branch` flag:
+
+```bash
+yarn set version from sources --branch 1211
+```
