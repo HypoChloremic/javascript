@@ -422,6 +422,8 @@ npx create-react-app my-app
 
 Empty the `src` folder. Here we can add `index.css` and `index.js`, which is in the main project folder. 
 
+
+
 #### imports
 
 ```js
@@ -434,16 +436,18 @@ import './index.css';
 
 ### Errors
 
-#### Creating in windows running in linux
+#### Creating in windows running in Linux
 
 We had an issue starting a project that was had been npx-started in windows and then cloned to a linux system. The problem associated with the `modules` not being installed on the linux system. This is solved by npm install inside the project folder. 
+
+
 
 ## Components
 
 React is nice for building user-interfaces. Implements **components**. 
 
 * With components, **we tell react what we want to see on the screen**:
-* When our data changes, react will update and re-rennder our components
+* When our data changes, react will update and re-render our components
 
 
 
@@ -698,6 +702,10 @@ https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
 
 ```bash
 > npx create-next-app kastadevaccin --use-npm --example "https://github.com/vercel/next-learn-starter/tree/master/learn-starter"
+
+// in case error: e.g. "next not found", do the following
+// in the root folder
+> npm install
 ```
 
 #### Example
