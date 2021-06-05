@@ -120,6 +120,108 @@ class Model extends Car {
 }
 ```
 
+### import, export
+
+In js it possible to share code between files in the same project (or other projects for that matter), similar to python. 
+
+#### Exports
+
+By exporting code, it is possible to share import that code elsewhere. 
+
+There are two types of exports:
+
+##### Named Exports (Zero or more exports per module)
+
+1. Note that in the `export` it is possible to provide `export ... as 'theNameWeWantToImport'`. 
+
+2. Named exports are useful to export several values. During the import, it is mandatory to use the same name of the corresponding object.
+
+3. ```js
+   // export features declared earlier
+   export { myFunction, myVariable };
+   
+   // export individual features (can export var, let,
+   // const, function, class)
+   export let myVariable = Math.sqrt(2);
+   export function myFunction() { ... };
+   ```
+
+
+
+##### Default Exports (One per module)
+
+1. But a default export can be imported with any name for example:
+
+   ```js
+   // file test.js
+   let k; export default k = 12;
+   // some other file
+   import m from './test'; // note that we have the freedom to use import m instead of import k, because k was default export
+   console.log(m);        // will log 12
+   ```
+
+2. If we want to export a single value or to have a fallback value for your module, you could use a default export:
+
+   ```js
+   // module "my-module.js"
+   
+   export default function cube(x) {
+     return x * x * x;
+   }
+   ```
+
+   Then, in another script, it is straightforward to import the default export:
+
+   ```js
+   import cube from './my-module.js';
+   console.log(cube(3)); // 27
+   ```
+
+
+
+
+
+```js
+// Exporting individual features
+export let name1, name2, …, nameN; // also var, const
+export let name1 = …, name2 = …, …, nameN; // also var, const
+export function functionName(){...}
+export class ClassName {...}
+```
+
+```js
+// Export list
+export { name1, name2, …, nameN };
+```
+```js
+// Renaming exports
+export { variable1 as name1, variable2 as name2, …, nameN };
+```
+
+```js
+// Exporting destructured assignments with renaming
+export const { name1, name2: bar } = o;
+```
+
+```js
+// Default exports
+export default expression;
+export default function (…) { … } // also class, function*
+export default function name1(…) { … } // also class, function*
+export { name1 as default, … };
+```
+
+
+
+```js
+// Aggregating modules
+export * from …; // does not set the default export
+export * as name1 from …; // Draft ECMAScript® 2O21
+export { name1, name2, …, nameN } from …;
+export { import1 as name1, import2 as name2, …, nameN } from …;
+export { default, … } from …;
+```
+
 
 
 ## Extracting data from tables
@@ -989,7 +1091,7 @@ export default function Layout({ children }) {
 }
 ```
 
-### Automatically Generates Unique Class Names
+##### Automatically Generates Unique Class Names
 
 Now, if you take a look at the HTML in your browser’s devtools, you’ll notice that the `div` rendered by the `Layout` component has a class name that looks like `layout_container__...`:
 
@@ -997,11 +1099,11 @@ Now, if you take a look at the HTML in your browser’s devtools, you’ll notic
 
 This is what [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) does: *It automatically generates unique class names*. As long as you use CSS Modules, you don’t have to worry about class name collisions.
 
-Furthermore, Next.js’s code splitting feature works on [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) as well. It ensures the minimal amount of CSS is loaded for each page. This results in smaller bundle sizes.
+Furthermore, Next.js’s code splitting feature works on [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) as well. It ensures the minimal amount of CSS is loaded for each page. This re	sults in smaller bundle sizes.
 
 [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) are extracted from the JavaScript bundles at build time and generate `.css` files that are loaded automatically by Next.js.
 
-#### Global Styles
+##### Global Styles
 
 [CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css) are useful for component-level styles. But if you want some CSS to be loaded by **every page**, Next.js has support for that as well.
 
@@ -1021,7 +1123,7 @@ This `App` component is the top-level component which will be common across all 
 > npm run dev
 ```
 
-#### Adding Global CSS
+##### Adding Global CSS
 
 In Next.js, you can add [global CSS](https://nextjs.org/docs/basic-features/built-in-css-support#adding-a-global-stylesheet) files by importing them from [`pages/_app.js`](https://nextjs.org/docs/advanced-features/custom-app). You **cannot** import global CSS anywhere else.
 
@@ -1077,13 +1179,9 @@ export default function App({ Component, pageProps }) {
 
 **If it didn’t work**: Make sure you restart the development server when you add `pages/_app.js`.
 
-##### Newline
+**NOTE**: this suffices to import global css to all pages. I.e. by virtue of using `_app.js` in posts, the system knows already to import all of them as global css for all pages. 
 
-```react
-{' '} adds an empty space, which is used to divide text over multiple lines.
-```
-
-#### Update components/layout.module.css
+##### Update components/layout.module.css
 
 First, open `components/layout.module.css` and replace its content with the following more polished styles for the layout and profile picture:
 
@@ -1105,7 +1203,7 @@ First, open `components/layout.module.css` and replace its content with the foll
 }
 ```
 
-#### Create styles/utils.module.css
+##### Create styles/utils.module.css
 
 Second, let’s create a set of utility CSS classes for typography and others that will be useful across multiple components.
 
@@ -1166,7 +1264,7 @@ Let’s add a new CSS file called `styles/utils.module.css` with the following c
 }
 ```
 
-#### Update components/layout.js
+##### Update components/layout.js
 
 Third, open `components/layout.js` and replace its content with the following code, **changing** `Your Name` to an actual name:
 
@@ -1246,7 +1344,9 @@ export default function Layout({ children, home }) {
 }
 ```
 
+#### Statics
 
+Next.js can serve static files, like images, under a folder called `public` in the root directory. Files inside `public` can then be referenced by your code starting from the base URL (`/`).
 
 # Yarn
 
